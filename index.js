@@ -25,11 +25,13 @@ const authRouter = require('./routes/authRouter');
 const taskRouter = require('./routes/taskRouter');
 const leaveRouter = require('./routes/leaveRouter');
 const holidayRouter = require('./routes/holidayRouter');
+const notificationRouter = require("./routes/notificationRouter");
 
 app.use('/auth', authRouter);
 app.use('/task', taskRouter);
 app.use('/leave', leaveRouter);
 app.use('/holiday', holidayRouter);
+app.use("/notification", notificationRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);

@@ -1,4 +1,5 @@
 const task = require("../models/taskModel");
+const Notification = require("../models/notificationModel");
 
 exports.createtask = async (req, res) => {
   try {
@@ -14,7 +15,20 @@ exports.createtask = async (req, res) => {
     });
 
     await newtask.populate("createdBy", "firstName lastName email");
-await newtask.populate("assignedTo", "firstName lastName email");
+    await newtask.populate("assignedTo", "firstName lastName email");
+
+        await Notification.create({
+      user: assignedTo,
+      message: `${newtask.createdBy.firstName} ${newtask.createdBy.lastName} assigned you a new task: ${title}`,
+      type: "task",
+      relatedId: newtask._id,
+    });
+
+
+    console.log(
+      "Notification created for user:",
+      assignedTo
+    );
 
     res.status(201).json({
       message: "Task created successfully",
@@ -39,6 +53,12 @@ exports.deletetask = async (req, res) =>
             message: "task not found"
        })
         }
+
+            await Notification.deleteMany({
+            relatedId: taskstodelete._id,
+            type: "task"
+          });
+
 
         await task.findByIdAndDelete(id);
         return res.status(200).json({
@@ -67,12 +87,14 @@ exports.updatetask = async(req,res) =>
             message: "task not found"
                 }    )
         }
-        const data = await task.findByIdAndUpdate(id, req.body)
+        const data = await task.findByIdAndUpdate(id, req.body, { new: true })
+          .populate("createdBy", "firstName lastName email")
+          .populate("assignedTo", "firstName lastName email");
 
          return res.status(200).json({
             message: "Task Updated Succesfully",
             data
-          })    
+          });    
         }
         catch(ex)
         {
