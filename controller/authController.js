@@ -75,7 +75,7 @@ const accesstoken = jwt.sign(
 },
 SECRET_TOKEN,
 {
-    expiresIn: 60*60,
+    expiresIn: 10 * 24 * 60 * 60, // 10 days
 }
 )
 
