@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/UserModel"); 
+const User = require("../models/userModel"); 
 const jwt = require("jsonwebtoken");
 const SECRET_TOKEN = process.env.JWT_SECRET || "hello-world-crm";
 
